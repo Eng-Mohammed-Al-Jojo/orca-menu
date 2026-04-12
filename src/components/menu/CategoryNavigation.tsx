@@ -103,7 +103,7 @@ function TabButton({
         transition-all duration-200 snap-start
 
         ${isActive
-          ? "text-black"
+          ? "text-white"
           : "text-(--menu-text-muted) bg-(--menu-card-bg)/40 border border-(--menu-border)"
         }
       `}
@@ -126,7 +126,7 @@ function TabButton({
         <motion.div
           layoutId="activeTabPill"
           transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-          className="absolute inset-0 bg-secondary rounded-2xl shadow-lg shadow-secondary/25"
+          className="absolute inset-0 bg-primary rounded-2xl shadow-lg shadow-secondary/25"
         />
       )}
     </button>
