@@ -1,0 +1,490 @@
+@import "tailwindcss";
+
+/* ==========================================================
+   COLOR SYSTEM — Extracted from Orca RestoCafe Logo
+   Primary:   #2D8B4E (Orca green — logo icon)
+   Secondary: #FAB008 (Golden yellow — logo background circle)
+   Accent:    #1A1A1A (Dark — logo text)
+   ========================================================== */
+
+@theme {
+  --color-primary: #2D8B4E;
+  --color-primary-hover: #236B3C;
+  --color-secondary: #FAB008;
+  --color-secondary-hover: #e5a107;
+  --color-accent: #1A1A1A;
+
+  --shadow-premium: 0 8px 30px rgba(0, 0, 0, 0.04), 0 20px 60px rgba(0, 0, 0, 0.08);
+  --shadow-premium-hover: 0 12px 40px rgba(0, 0, 0, 0.08), 0 30px 80px rgba(0, 0, 0, 0.12);
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03), 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Utility Classes ===== */
+.rounded-4xl {
+  border-radius: 32px;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== Root Variables — Single Theme ===== */
+:root {
+  --bg-main: #f9f9f9;
+  --bg-card: #ffffff;
+  --text-main: #1a1a1a;
+  --text-muted: #666666;
+  --border-color: #eeeeee;
+
+  /* ===== Menu Theme ===== */
+  .menu-wrapper {
+    --menu-bg: var(--bg-main);
+    --menu-card-bg: var(--bg-card);
+    --menu-text: var(--text-main);
+    --menu-text-muted: var(--text-muted);
+    --menu-primary: #2D8B4E;
+    --menu-primary-hover: #236B3C;
+    --menu-secondary: #FAB008;
+    --menu-secondary-hover: #e5a107;
+    --menu-border: var(--border-color);
+    --menu-tab-active-bg: #2D8B4E;
+    --menu-tab-active-text: #FFFFFF;
+    --menu-tab-inactive-text: var(--text-muted);
+    --menu-badge-bg: #2D8B4E;
+    --menu-icon: #2D8B4E;
+    --menu-search-bg: var(--bg-card);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Cairo', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+/* النقاط العادية */
+.swiper-pagination-bullet {
+  background-color: black;
+  opacity: 0.7;
+}
+
+/* النقطة النشطة */
+.swiper-pagination-bullet-active {
+  background-color: #2D8B4E;
+  opacity: 1;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #2D8B4E;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+}
+
+@font-face {
+  font-family: 'Playpen Sans Arabic';
+  src: url('/fonts/PlaypenSansArabic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Lemonada';
+  src: url('/fonts/Lemonada.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BalooBhaijaan2-Bold';
+  src: url('/fonts/BalooBhaijaan2-Bold.ttf') format('truetype');
+  font-weight: 70;
+  font-style: extra-bold;
+}
+
+
+
+/* Cairo Thin */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Thin.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* Cairo ExtraLight */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-ExtraLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Cairo Light */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Cairo Regular */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Cairo Medium */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Cairo SemiBold */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Cairo Bold */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Cairo ExtraBold */
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* Almarai Light */
+@font-face {
+  font-family: 'Almarai';
+  src: url('/fonts/Almarai-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Almarai Regular */
+@font-face {
+  font-family: 'Almarai';
+  src: url('/fonts/Almarai-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Almarai Bold */
+@font-face {
+  font-family: 'Almarai';
+  src: url('/fonts/Almarai-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Almarai Extra Bold */
+@font-face {
+  font-family: 'Almarai';
+  src: url('/fonts/Almarai-ExtraBold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+
+body {
+  font-family: 'Playpen Sans Arabic', sans-serif;
+}
+
+
+@keyframes pulseScale {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-pulseScale {
+  animation: pulseScale 2s ease-in-out infinite;
+}
+
+@keyframes textGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-textGradient {
+  background-size: 200% 200%;
+  animation: textGradient 3s ease infinite;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes floatSlow {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-floatSlow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+/* أنيميشن Toast */
+@keyframes toast-show {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(0.9);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1.05);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(0.95);
+  }
+}
+
+/* class لإستدعاء الانيميشن */
+.animate-toast-show {
+  animation: toast-show 1s ease-in-out forwards;
+}
+
+
+/* مخصص للitemRow animations*/
+
+@keyframes itemEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes imagePop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes toastShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -70px) scale(1);
+  }
+}
+
+.animate-item-enter {
+  animation: itemEnter 0.45s ease-out both;
+}
+
+.animate-image-pop {
+  animation: imagePop 0.4s ease-out both;
+}
+
+.animate-toast-show {
+  animation: toastShow 0.3s ease-out both;
+}
+
+
+
+@keyframes loaderFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes logoFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes haloPulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes bgPulse {
+
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes dot {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+}
+
+.animate-loader-fade {
+  animation: loaderFade 0.4s ease-out both;
+}
+
+.animate-logo-float {
+  animation: logoFloat 2.8s ease-in-out infinite;
+}
+
+.animate-halo {
+  animation: haloPulse 3s ease-in-out infinite;
+}
+
+.animate-bg-pulse {
+  animation: bgPulse 4s ease-in-out infinite;
+}
+
+.animate-dot-1 {
+  animation: dot 1.4s infinite;
+}
+
+.animate-dot-2 {
+  animation: dot 1.4s infinite 0.2s;
+}
+
+.animate-dot-3 {
+  animation: dot 1.4s infinite 0.4s;
+}
