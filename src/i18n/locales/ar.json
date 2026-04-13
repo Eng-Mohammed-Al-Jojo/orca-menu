@@ -363,7 +363,13 @@
         "mark_archived": "نقل للأرشيف",
         "restore": "استعادة الطلب",
         "filters": "الفلاتر",
-        "revert_status": "تراجع عن الحالة"
+        "revert_status": "تراجع عن الحالة",
+        "order_time": "وقت الطلب",
+        "order_status": "حالة الطلب",
+        "gallery_title": "معرض الصور",
+        "gallery_desc": "معرض الصور",
+        "close_gallery": "إغلاق المعرض",
+        "select_image_desc": "اختر صورة من المعرض"
     },
     "footer": {
         "developed_by": "تصميم وتطوير",

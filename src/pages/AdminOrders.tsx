@@ -281,6 +281,7 @@ export default function AdminOrdersPage() {
                                 <tr className="bg-(--bg-main)/50 border-b border-(--border-color)">
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.order_id') || "رقم الطلب"}</th>
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.customer')}</th>
+                                    <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.order_time')}</th>
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.type') || "النوع"}</th>
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.status_lifecycle') || "دورة حياة الطلب"}</th>
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.payment') || "الدفع"}</th>
@@ -346,7 +347,25 @@ export default function AdminOrdersPage() {
                                                         </div>
                                                     </div>
                                                 </td>
+                                                {/* TIME ORDER */}
+                                                <td className="px-6 py-5">
+                                                    <div className="flex flex-col items-center">
+                                                        <span className="text-sm font-bold text-(--text-main)">
+                                                            {order.createdAt
+                                                                ? new Date(order.createdAt).toLocaleTimeString('ar-EG', {
+                                                                    hour: '2-digit',
+                                                                    minute: '2-digit'
+                                                                })
+                                                                : "--"}
+                                                        </span>
 
+                                                        <span className="text-[10px] text-(--text-muted)">
+                                                            {order.createdAt
+                                                                ? new Date(order.createdAt).toLocaleDateString('ar-EG')
+                                                                : ""}
+                                                        </span>
+                                                    </div>
+                                                </td>
                                                 {/* TYPE */}
                                                 <td className="px-6 py-5">
                                                     <TypeBadge type={order.orderType} t={t} />

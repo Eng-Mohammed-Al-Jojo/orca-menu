@@ -30,7 +30,7 @@ export default function CartButton({ className = "" }: CartButtonProps) {
                         className={`
                             fixed bottom-8 ${i18n.language === 'ar' ? 'left-8' : 'right-8'} z-50
                             flex items-center gap-4
-                            bg-primary text-white
+                            bg-red-500 text-white cursor-pointer
                             px-8 py-5 rounded-full
                             shadow-[0_20px_50px_rgba(167,10,5,0.4)]
                             hover:shadow-[0_25px_60px_rgba(167,10,5,0.5)]
@@ -48,7 +48,7 @@ export default function CartButton({ className = "" }: CartButtonProps) {
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     style={{ willChange: 'transform, opacity' }}
-                                    className={`absolute -top-4 ${i18n.language === 'ar' ? '-left-4' : '-right-4'} bg-secondary text-black text-[11px] w-7 h-7 flex items-center justify-center rounded-full border-2 border-secondary font-black shadow-xl ring-4 ring-secondary/20`}
+                                    className={`absolute -top-7 ${i18n.language === 'ar' ? '-left-4' : '-right-4'} bg-white text-primary text-[11px] w-7 h-7 flex items-center justify-center rounded-full border-2 border-primary`}
                                 >
                                     {totalItems}
                                 </motion.span>
