@@ -79,12 +79,12 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
               <div className="space-y-6">
                 <div className="flex justify-between items-start gap-4">
                   <div className="space-y-1">
-                    <h2 className="text-2xl sm:text-3xl font-black text-(--text-main) tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-(--text-main) tracking-tight">
                       {itemName}
                     </h2>
 
                   </div>
-                  <div className="text-2xl font-black text-primary flex items-baseline gap-1 shrink-0">
+                  <div className="text-2xl font-bold text-primary flex items-baseline gap-1 shrink-0">
                     {currentPrice}
                     <small className="text-sm opacity-70">₪</small>
                   </div>
@@ -95,7 +95,7 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
                 {/* Variant Selector (if multiple prices) */}
                 {prices.length > 1 && (
                   <div className="space-y-4">
-                    <span className="text-xs font-black text-(--text-muted) uppercase tracking-widest opacity-80">
+                    <span className="text-xs font-bold text-(--text-muted) uppercase tracking-widest opacity-80">
                       {t("common.select") || "اختر..."}
                     </span>
                     <div className="flex flex-wrap gap-3">
@@ -103,7 +103,7 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
                         <button
                           key={idx}
                           onClick={() => setSelectedPriceIndex(idx)}
-                          className={`px-6 py-3 rounded-2xl font-black text-sm transition-all border ${selectedPriceIndex === idx
+                          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all border ${selectedPriceIndex === idx
                             ? "bg-secondary text-black border-secondary shadow-lg shadow-secondary/20"
                             : "bg-(--bg-main) text-(--text-main) border-(--border-color) hover:border-secondary/40"
                             }`}
@@ -117,7 +117,7 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
 
                 {/* Quantity Selector */}
                 <div className="flex items-center justify-between py-2">
-                  <span className="text-sm font-black text-(--text-main) uppercase tracking-widest">
+                  <span className="text-sm font-bold text-(--text-main) uppercase tracking-widest">
                     {t("common.quantity") || "الكمية"}
                   </span>
                   <div className="flex items-center gap-6 bg-(--bg-main) p-2 rounded-2xl border border-(--border-color)">
@@ -128,7 +128,7 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
                     >
                       <FiMinus size={18} />
                     </motion.button>
-                    <span className="text-xl font-black w-8 text-center text-(--text-main)">
+                    <span className="text-xl font-bold w-8 text-center text-(--text-main)">
                       {quantity}
                     </span>
                     <motion.button
@@ -146,7 +146,7 @@ export default function ItemModal({ item, isOpen, onClose }: Props) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAdd}
-                  className="w-full py-5 rounded-full bg-primary text-white font-black shadow-xl shadow-primary/30 flex items-center justify-center gap-3 text-lg hover:bg-primary/95 transition-all mt-4"
+                  className="w-full py-5 rounded-full bg-primary text-white font-bold shadow-xl shadow-primary/30 flex items-center justify-center gap-3 text-lg hover:bg-primary/95 transition-all mt-4"
                 >
                   <FiShoppingCart size={22} />
                   <span>{t("common.add_to_order") || "إضافة للطلب"}</span>

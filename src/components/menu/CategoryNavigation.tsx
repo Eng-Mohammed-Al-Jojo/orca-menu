@@ -38,7 +38,7 @@ export default function CategoryNavigation({
         ref={containerRef}
         className="overflow-x-auto no-scrollbar pb-4 overscroll-x-contain"
       >
-        <div className="flex items-center gap-3 px-4 min-w-max">
+        <div className="flex items-center gap-3 px-0 min-w-max">
 
           {/* 🟦 ALL TAB (icon only) */}
           <TabButton
@@ -66,8 +66,6 @@ export default function CategoryNavigation({
       </div>
 
       {/* Gradient edges */}
-      <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-linear-to-l from-(--menu-bg) to-transparent lg:hidden" />
-      <div className="pointer-events-none absolute top-0 left-0 h-full w-8 bg-linear-to-r from-(--menu-bg) to-transparent lg:hidden" />
 
     </div>
   );
@@ -99,7 +97,7 @@ function TabButton({
       onClick={onClick}
       className={`
         relative flex items-center gap-2 px-5 py-3 rounded-2xl
-        text-xs font-black whitespace-nowrap
+        text-xs font-bold whitespace-nowrap
         transition-all duration-200 snap-start
 
         ${isActive
@@ -126,6 +124,7 @@ function TabButton({
         <motion.div
           layoutId="activeTabPill"
           transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+          style={{ willChange: "transform" }}
           className="absolute inset-0 bg-primary rounded-2xl shadow-lg shadow-secondary/25"
         />
       )}

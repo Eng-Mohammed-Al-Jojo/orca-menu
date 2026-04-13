@@ -1,21 +1,23 @@
 import { useMemo } from "react";
 import ItemRow from "./ItemRow";
 import type { Category, Item, Subcategory } from "./Menu";
-import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05 } }
+};
 
 interface Props {
   category: Category;
   subcategories: Subcategory[];
   items: Item[];
   orderSystem: boolean;
-  index?: number;
   onItemClick?: (item: Item) => void;
   onDetailsClick?: (item: Item) => void;
 }
 
 export default function CategorySection({ category, subcategories, items, orderSystem, onItemClick, onDetailsClick }: Props) {
-  useTranslation();
 
   const groupedItems = useMemo(() => {
     const groups: Record<string, Item[]> = {};
@@ -45,17 +47,12 @@ export default function CategorySection({ category, subcategories, items, orderS
 
   const catName = category.nameAr || category.name || "";
 
-  const containerVariants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.05 } }
-  };
-
   return (
     <div className="w-full space-y-10">
       {/* Category Header */}
       <div className="flex items-center gap-4">
         <div className="w-2 h-10 bg-primary rounded-full shadow-[0_0_20px_rgba(45,139,78,0.3)]" />
-        <h2 className="text-2xl md:text-3xl font-black text-(--menu-text) tracking-tight">
+        <h2 className="text-2xl md:text-3xl font-bold text-(--menu-text) tracking-tight">
           {catName}
         </h2>
       </div>
@@ -68,14 +65,13 @@ export default function CategorySection({ category, subcategories, items, orderS
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           >
-            {groupedItems.noSubItems.map((item, idx) => (
+            {groupedItems.noSubItems.map((item) => (
               <ItemRow
                 key={item.id}
                 item={item}
                 orderSystem={orderSystem}
-                index={idx}
                 onClick={onItemClick}
                 onDetailsClick={onDetailsClick}
               />
@@ -92,7 +88,7 @@ export default function CategorySection({ category, subcategories, items, orderS
               <div className="h-px flex-1 bg-primary/30" />
 
               {/* center title */}
-              <span className="px-4 py-1.5 rounded-2xl bg-secondary/10 text-secondary text-sm md:text-base font-black uppercase tracking-widest border border-secondary/20 whitespace-nowrap">
+              <span className="px-4 py-1.5 rounded-2xl bg-secondary/10 text-secondary text-sm md:text-base font-bold uppercase tracking-widest border border-secondary/20 whitespace-nowrap">
                 {sub.nameAr}
               </span>
 
@@ -106,14 +102,13 @@ export default function CategorySection({ category, subcategories, items, orderS
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8"
+              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
             >
-              {groupedItems.groups[sub.id].map((item, idx) => (
+              {groupedItems.groups[sub.id].map((item) => (
                 <ItemRow
                   key={item.id}
                   item={item}
                   orderSystem={orderSystem}
-                  index={idx}
                   onClick={onItemClick}
                   onDetailsClick={onDetailsClick}
                 />

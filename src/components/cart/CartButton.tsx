@@ -20,11 +20,12 @@ export default function CartButton({ className = "" }: CartButtonProps) {
             <AnimatePresence>
                 {totalItems > 0 && (
                     <motion.button
-                        initial={{ scale: 0, opacity: 0, y: 30 }}
+                        initial={{ scale: 0.9, opacity: 0, y: 10 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0, opacity: 0, y: 30 }}
-                        whileHover={{ scale: 1.05, y: -2 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 10 }}
+                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.95 }}
+                        style={{ willChange: 'transform, opacity' }}
                         onClick={() => setOpen(true)}
                         className={`
                             fixed bottom-8 ${i18n.language === 'ar' ? 'left-8' : 'right-8'} z-50
@@ -44,8 +45,9 @@ export default function CartButton({ className = "" }: CartButtonProps) {
                             <AnimatePresence mode="wait">
                                 <motion.span
                                     key={totalItems}
-                                    initial={{ scale: 0.5, opacity: 0, y: 10 }}
-                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    style={{ willChange: 'transform, opacity' }}
                                     className={`absolute -top-4 ${i18n.language === 'ar' ? '-left-4' : '-right-4'} bg-secondary text-black text-[11px] w-7 h-7 flex items-center justify-center rounded-full border-2 border-secondary font-black shadow-xl ring-4 ring-secondary/20`}
                                 >
                                     {totalItems}

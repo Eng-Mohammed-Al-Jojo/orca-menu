@@ -61,28 +61,28 @@ export default function OrderStatusButton() {
             case "pending":
                 return {
                     label: t('admin.pending'),
-                    icon: <FaClock className="animate-pulse" />,
+                    icon: <FaClock />,
                     color: "bg-amber-500",
                     progress: 20
                 };
             case "confirmed":
                 return {
                     label: t('admin.confirmed'),
-                    icon: <FaCheckCircle className="animate-bounce" />,
+                    icon: <FaCheckCircle />,
                     color: "bg-blue-500",
                     progress: 40
                 };
             case "preparing":
                 return {
                     label: t('admin.preparing'),
-                    icon: <FaUtensils className="animate-pulse" />,
+                    icon: <FaUtensils />,
                     color: "bg-indigo-500",
                     progress: 60
                 };
             case "ready":
                 return {
                     label: t('admin.ready'),
-                    icon: <FaBell className="animate-tada" />,
+                    icon: <FaBell />,
                     color: "bg-purple-500",
                     progress: 80
                 };
@@ -125,18 +125,20 @@ export default function OrderStatusButton() {
     return (
         <AnimatePresence>
             <motion.div
-                initial={{ y: 100, opacity: 0, scale: 0.8 }}
+                initial={{ y: 20, opacity: 0, scale: 0.95 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: 100, opacity: 0, scale: 0.8 }}
+                exit={{ y: 20, opacity: 0, scale: 0.95 }}
+                style={{ willChange: 'transform, opacity' }}
                 className={`fixed bottom-24 ${isRtl ? 'left-6 sm:left-10' : 'right-6 sm:right-10'} z-50 w-[280px] sm:w-[320px]`}
             >
                 <div className="bg-(--bg-card)/80 backdrop-blur-2xl border border-(--border-color) rounded-[2.5rem] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden relative group">
                     {/* Progress Bar Background */}
                     <div className="absolute top-0 left-0 w-full h-1 bg-(--border-color) opacity-20" />
                     <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${statusInfo.progress}%` }}
-                        className={`absolute top-0 left-0 h-1 ${statusInfo.color} transition-all duration-1000`}
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: statusInfo.progress / 100 }}
+                        style={{ originX: isRtl ? 1 : 0, willChange: 'transform' }}
+                        className={`absolute top-0 left-0 right-0 h-1 ${statusInfo.color} transition-all duration-1000`}
                     />
 
                     <div className="flex items-center gap-4">

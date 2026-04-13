@@ -38,7 +38,7 @@ export default function MenuPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-(--menu-bg) text-(--menu-text) font-['Cairo'] overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-(--menu-bg) text-(--menu-text) menu-wrapper overflow-x-hidden">
 
       {/* Loading */}
       <LoadingScreen visible={isLoading} />
@@ -65,16 +65,15 @@ export default function MenuPage() {
       <main className="flex flex-col flex-1">
 
         {/*Hero Section*/}
-        <section className="relative flex flex-col items-center justify-center text-center py-20 px-6 overflow-hidden">
+        <section className="relative flex flex-col items-center justify-center text-center py-10 px-6 overflow-hidden">
 
           {/* Soft ambient glow */}
           <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.05, 0.12, 0.05],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute w-[400px] h-[400px] bg-primary rounded-full blur-[120px]"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 0.1 }}
+            transition={{ duration: 0.8 }}
+            style={{ willChange: "transform, opacity" }}
+            className="absolute w-[400px] h-[400px] bg-primary rounded-full blur-2xl"
           />
 
           {/* Logo Container */}
@@ -87,18 +86,19 @@ export default function MenuPage() {
 
             {/* subtle ring */}
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              initial={{ opacity: 0, rotate: 0 }}
+              animate={{ opacity: 1, rotate: 45 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              style={{ willChange: "transform, opacity" }}
               className="absolute w-[220px] h-[220px] md:w-[300px] md:h-[300px] rounded-full border border-primary/10"
             />
 
             {/* logo */}
             <motion.img
-              animate={{
-                y: [0, -10, 0],
-                scale: [1, 1.05, 1],
-              }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              initial={{ y: 20, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              style={{ willChange: "transform, opacity" }}
               src="/logo.png"
               className="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
               alt="Logo"

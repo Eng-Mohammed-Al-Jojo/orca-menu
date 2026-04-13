@@ -45,8 +45,9 @@ export default function GlassButton({ onClick, icon, label, variant = "primary",
   };
   return (
     <motion.button
-      whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(255,255,255,0.1)" }}
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
+      style={{ willChange: "transform" }}
       onClick={onClick}
       title={title}
       className={`
@@ -59,11 +60,7 @@ export default function GlassButton({ onClick, icon, label, variant = "primary",
         ${className}
       `}
     >
-      <motion.div
-        animate={{ opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute inset-0 bg-white/10"
-      />
+      <div className="absolute inset-0 bg-white/5" />
       <span className="relative z-10">{icon}</span>
       {label && <span className="relative z-10 font-bold text-sm hidden sm:inline">{label}</span>}
     </motion.button>

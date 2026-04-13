@@ -28,7 +28,8 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md z-0"
+            style={{ willChange: "opacity" }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0"
           />
 
           {/* Drawer Body - Slides from Left for RTL luxury feel */}
@@ -42,9 +43,10 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
             {/* Header / Banner Area */}
             <div className="relative h-64 sm:h-80 overflow-hidden shrink-0">
               <motion.img
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
+                initial={{ scale: 1.05, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                style={{ willChange: "transform, opacity" }}
                 src={item.image ? `/images/${item.image}` : "/logo.png"}
                 alt={itemName}
                 className="w-full h-full object-cover"
@@ -63,12 +65,12 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
                 <motion.h2
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  className="text-3xl font-black text-white drop-shadow-2xl"
+                  className="text-3xl font-bold text-white drop-shadow-2xl"
                 >
                   {itemName}
                 </motion.h2>
                 <div className="flex items-center justify-end gap-2 mt-2 pl-4">
-                  <span className="text-sm font-black text-primary bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                  <span className="text-sm font-bold text-primary bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
                     {String(item.price).split(",")[0]} ₪
                   </span>
                 </div>
@@ -84,7 +86,7 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
                   <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                     <FiInfo size={20} />
                   </div>
-                  <h3 className="text-lg font-black text-(--text-main)">{t('admin.ingredients_label')}</h3>
+                  <h3 className="text-lg font-bold text-(--text-main)">{t('admin.ingredients_label')}</h3>
                 </div>
 
                 <div className="relative">
@@ -94,9 +96,10 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
                       getIngredientList(itemDescription).map((ingredient, idx) => (
                         <motion.div
                           key={idx}
-                          initial={{ opacity: 0, x: 20 }}
+                          initial={{ opacity: 0, x: 10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 }}
+                          transition={{ delay: idx * 0.05 }}
+                          style={{ willChange: "transform, opacity" }}
                           className="flex items-start gap-3 group"
                         >
                           <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0 group-hover:scale-150 transition-transform" />
@@ -118,12 +121,12 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
               <section className="pt-6 border-t border-(--border-color)/30 grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-3xl bg-primary/5 border border-primary/10 flex flex-col gap-2 group hover:bg-primary/10 transition-colors">
                   <FiCheckCircle className="text-primary" size={20} />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-primary/60">{t('menu.fresh_daily')}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary/60">{t('menu.fresh_daily')}</span>
                   <p className="text-xs font-bold text-(--text-main)">{t('menu.fresh_daily_desc') || "يتم التحضير بمكونات طازجة يومياً"}</p>
                 </div>
                 <div className="p-4 rounded-3xl bg-secondary/5 border border-secondary/10 flex flex-col gap-2 group hover:bg-secondary/10 transition-colors">
                   <FiCheckCircle className="text-secondary" size={20} />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-secondary/60">{t('menu.quality_guaranteed')}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-secondary/60">{t('menu.quality_guaranteed')}</span>
                   <p className="text-xs font-bold text-(--text-main)">{t('menu.quality_desc') || "نضمن لك أعلى مستويات الجودة"}</p>
                 </div>
               </section>
@@ -134,7 +137,7 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
             <div className="p-6 sm:p-10 border-t border-(--border-color)/30 bg-(--bg-card)">
               <button
                 onClick={onClose}
-                className="w-full py-5 bg-primary text-white rounded-3xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full py-5 bg-primary text-white rounded-3xl font-bold text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 {t('common.close')}
               </button>

@@ -109,7 +109,7 @@ export default function Footer() {
         {complaintsWhatsapp !== "" && (
           <button
             onClick={() => setShowFeedbackModal(true)}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-(--menu-primary) text-white font-black hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-(--menu-primary) text-white font-bold hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
           >
             <FaCommentDots />
             <span>{t('admin.feedback')}</span>
@@ -121,7 +121,7 @@ export default function Footer() {
           <a href="https://engmohammedaljojo.vercel.app/" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
             <FaLaptopCode className="text-lg" />
-            <div className="text-[10px] font-black uppercase tracking-widest text-center">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-center">
               {t('footer.developed_by')} : Eng.<span className="text-(--menu-primary)">Mohammed El joujo</span>
             </div>
           </a>

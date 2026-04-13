@@ -130,51 +130,48 @@ export default function LoadingScreen({ visible, onExited }: Props) {
               />
 
               {/* Inner Decorative Ring */}
-              <motion.circle
+              <circle
                 cx="140" cy="140" r={radius - 12}
                 stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 15"
                 fill="none"
-                className="text-primary"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                style={{ originX: '140px', originY: '140px' }}
+                className="text-primary opacity-20"
               />
               {/* Outer Decorative Ring */}
-              <motion.circle
+              <circle
                 cx="140" cy="140" r={radius + 12}
                 stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 20"
                 fill="none"
-                className="text-primary"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                style={{ originX: '140px', originY: '140px' }}
+                className="text-primary opacity-20"
               />
             </svg>
 
             {/* The Floating Glass Orb */}
             <motion.div
-              animate={{ y: [-8, 8, -8] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{ willChange: "transform, opacity" }}
               className="
-                                relative w-40 h-40 rounded-full 
-                                bg-white backdrop-blur-3xl
-                                border border-white/30
-                                shadow-[0_10px_30px_rgba(var(--menu-primary-rgb),0.5),0_10px_20px_rgba(0,0,0,0.1),inset_0_0_50px_rgba(var(--menu-primary-rgb),0.2)]
-                                flex items-center justify-center p-6 overflow-hidden
-                                hover:shadow-[0_15px_40px_rgba(255,255,255,0.6),0_10px_30px_rgba(0,0,0,0.15),inset_0_0_60px_rgba(255,255,255,0.15)]
-                                transition-shadow duration-500
-                            "
+                relative w-40 h-40 rounded-full 
+                bg-white
+                border border-white/30
+                shadow-xl
+                flex items-center justify-center p-6 overflow-hidden
+                transition-shadow duration-500
+              "
             >
               {/* Inner Orb Shine */}
               <motion.div
-                animate={{ x: ['-200%', '200%'] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.1 }}
                 className="absolute inset-0 bg-linear-to-tr from-transparent via-primary to-transparent skew-x-12"
               />
-              {/* Pulsating Logo */}
+              {/* Logo */}
               <motion.img
-                animate={{ scale: [0.95, 1.05, 0.95] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                initial={{ scale: 0.85 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                style={{ willChange: "transform" }}
                 src="/logo.png"
                 className="w-full h-full object-contain relative z-10 "
                 alt="Logo"
@@ -193,7 +190,7 @@ export default function LoadingScreen({ visible, onExited }: Props) {
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                className="text-xl md:text-2xl font-black text-(--text-main) tracking-widest text-center"
+                className="text-xl md:text-2xl font-bold text-(--text-main) tracking-widest text-center"
               >
                 {messages[msgIndex]}
               </motion.div>
@@ -202,7 +199,7 @@ export default function LoadingScreen({ visible, onExited }: Props) {
             {/* Percentage Display */}
             <div className="mt-8 flex items-center gap-6 opacity-80">
               <div className="h-px w-16 bg-linear-to-r from-transparent to-primary" />
-              <span className="text-sm font-black text-primary tracking-[0.4em] drop-shadow-[0_0_10px_rgba(var(--color-primary),0.8)]" dir="ltr">
+              <span className="text-sm font-bold text-primary tracking-[0.4em] drop-shadow-[0_0_10px_rgba(var(--color-primary),0.8)]" dir="ltr">
                 {Math.round(progress)}%
               </span>
               <div className="h-px w-16 bg-linear-to-l from-transparent to-primary" />

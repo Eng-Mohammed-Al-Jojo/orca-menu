@@ -11,6 +11,23 @@ import CategoryNavigation from "./CategoryNavigation";
 
 import { MenuService } from "../../services/menuService";
 
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05 } }
+};
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0, scale: 0.98 }
+};
+
+const categoryVariants = {
+  initial: { opacity: 0, x: 10 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -10 }
+};
+
 /* ================= Types ================= */
 export interface Category {
   id: string;
@@ -188,6 +205,14 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
     [availableCategories, activeCategoryId]
   );
 
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleSearchClear = useCallback(() => {
+    setSearchTerm("");
+  }, []);
+
   /* ================= Phase: Loading ================= */
   if (phase === "loading") return null;
 
@@ -195,7 +220,7 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
   if (phase === "skeleton") {
     return (
       <div className="menu-wrapper">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl mx-auto px-4 pb-32">
+        <motion.div variants={pageVariants} initial="initial" animate="animate" className="max-w-7xl mx-auto px-4 pb-32">
           <MenuSkeleton />
         </motion.div>
       </div>
@@ -209,24 +234,24 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="max-w-7xl mx-auto px-4 pb-32"
+        className="max-w-7xl mx-auto px-1 pb-20"
       >
         <div className="flex flex-col gap-8">
           {/* Main Content Area */}
           <div className="flex-1 w-full min-w-0">
             {/* Header / Search */}
-            <div className="flex flex-col mb-8 gap-6">
+            <div className="flex flex-col mb-8 gap-2">
               <div className="w-full max-w-2xl mx-auto relative group">
                 <FiSearch className="right-6 absolute top-1/2 -translate-y-1/2 text-(--menu-text-muted) group-focus-within:text-primary transition-colors text-xl" />
                 <input
                   type="text"
                   placeholder={t('common.search')}
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-(--menu-search-bg) border border-(--menu-border) rounded-3xl py-5 pr-14 pl-6 text-sm font-bold focus:border-primary outline-none transition-all shadow-xl text-right text-(--menu-text)"
+                  onChange={handleSearchChange}
+                  className="w-full bg-(--menu-search-bg) border border-primary rounded-3xl py-3 pr-14 pl-6 text-sm font-bold focus:border-secondary outline-none transition-all shadow-xl text-right text-(--menu-text)"
                 />
                 {searchTerm && (
-                  <button onClick={() => setSearchTerm("")} className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-(--menu-bg) flex items-center justify-center text-(--menu-text-muted) border border-(--menu-border)"><FiX /></button>
+                  <button onClick={handleSearchClear} className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-(--menu-bg) flex items-center justify-center text-(--menu-text-muted) border border-(--border-color)"><FiX /></button>
                 )}
               </div>
             </div>
@@ -244,17 +269,14 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
               {searchTerm ? (
                 <motion.div
                   key="search"
-                  variants={{
-                    hidden: {},
-                    show: { transition: { staggerChildren: 0.05 } }
-                  }}
+                  variants={containerVariants}
                   initial="hidden"
                   animate="show"
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8"
+                  exit="exit"
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
                 >
-                  {filteredItems.map((item, idx) => (
-                    <ItemRow key={item.id} item={item} orderSystem={orderSystem} index={idx} onClick={handleItemClick} onDetailsClick={onDetailsClick} />
+                  {filteredItems.map((item) => (
+                    <ItemRow key={item.id} item={item} orderSystem={orderSystem} onClick={handleItemClick} onDetailsClick={onDetailsClick} />
                   ))}
                 </motion.div>
               ) : availableCategories.length === 0 ? (
@@ -267,7 +289,7 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
                     🍽️
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-(--menu-text)">{t('menu.empty_menu') || "Menu Coming Soon"}</h3>
+                    <h3 className="text-2xl font-bold text-(--menu-text)">{t('menu.empty_menu') || "Menu Coming Soon"}</h3>
                     <p className="text-(--menu-text-muted) font-bold max-w-xs mx-auto">
                       {t('menu.empty_menu_desc') || "We are currently preparing our delicious selection. Please check back shortly."}
                     </p>
@@ -276,9 +298,10 @@ export default function Menu({ onLoadingChange, onFeaturedCheck, onFeaturedItems
               ) : (
                 <motion.div
                   key={activeCategoryId}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  variants={categoryVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
                   transition={{ duration: 0.3 }}
                   className="space-y-12"
                 >
