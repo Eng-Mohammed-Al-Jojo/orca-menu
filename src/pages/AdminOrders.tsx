@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import {
     FiSearch, FiFilter, FiCalendar, FiPackage, FiCheckCircle,
     FiClock, FiTrash2, FiArchive, FiDollarSign, FiBarChart2, FiLayers,
-    FiUser, FiShoppingBag, FiInfo, FiTag, FiArrowRight, FiRotateCw, FiX, FiBell,
+    FiShoppingBag, FiInfo, FiTag, FiArrowRight, FiRotateCw, FiX, FiBell,
     FiTruck
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
@@ -276,7 +276,7 @@ export default function AdminOrdersPage() {
                 {/* Professional Orders Table */}
                 <div className="bg-(--bg-card) rounded-4xl border border-(--border-color) shadow-2xl overflow-hidden flex flex-col">
                     <div className="overflow-x-auto custom-scrollbar">
-                        <table className="w-full text-right border-collapse min-w-[800px]">
+                        <table className="w-full text-center border-collapse min-w-[800px]">
                             <thead>
                                 <tr className="bg-(--bg-main)/50 border-b border-(--border-color)">
                                     <th className="px-6 py-5 text-xs font-black uppercase text-(--text-muted) tracking-widest">{t('admin.order_id') || "رقم الطلب"}</th>
@@ -332,9 +332,7 @@ export default function AdminOrdersPage() {
                                                 {/* CUSTOMER */}
                                                 <td className="px-6 py-5">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
-                                                            <FiUser size={16} />
-                                                        </div>
+
 
                                                         <div className="flex flex-col">
                                                             <p className="text-sm font-black text-(--text-main) leading-tight">
@@ -366,7 +364,7 @@ export default function AdminOrdersPage() {
                                                 </td>
 
                                                 {/* PAYMENT */}
-                                                <td className="px-6 py-5">
+                                                <td className="px-2 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -375,11 +373,14 @@ export default function AdminOrdersPage() {
                                                                 order.paymentStatus === "paid" ? "unpaid" : "paid"
                                                             );
                                                         }}
-                                                        className="group"
+                                                        className="group w-full flex justify-center"
                                                     >
-                                                        <div className="transition-transform duration-300 group-hover:scale-105">
+                                                        <div className="transition-transform duration-300 group-hover:scale-105 max-w-full">
                                                             <PaymentBadge
-                                                                isPaid={order.paymentStatus === "paid" || order.status === "delivered"}
+                                                                isPaid={
+                                                                    order.paymentStatus === "paid" ||
+                                                                    order.status === "delivered"
+                                                                }
                                                                 t={t}
                                                             />
                                                         </div>

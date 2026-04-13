@@ -41,9 +41,7 @@ export default function DeleteConfirmationModal({ isOpen, onClose, onConfirm, ti
                         <h3 className="text-2xl font-black text-(--text-main) mb-3">
                             {title}
                         </h3>
-                        <p className="text-(--text-muted) text-sm font-bold leading-relaxed mb-2">
-                            {t('ar.delete_item_confirm') || "هل أنت متأكد من رغبتك في حذف هذا العنصر؟"}
-                        </p>
+
                         {details && (
                             <div className="bg-(--bg-main) p-3 rounded-2xl border border-(--border-color) mb-6">
                                 <span className="text-xs font-black text-primary tracking-widest uppercase">{details}</span>
