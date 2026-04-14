@@ -20,7 +20,7 @@ interface OrderSettings {
 }
 
 export default function CartModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-    const { items, totalPrice, clearCart, orderId, updateOrderId } = useCart();
+    const { items, totalPrice, clearCart, orderId, updateOrderId, isFullTrackingOpen, setIsFullTrackingOpen } = useCart();
     const { t, i18n } = useTranslation();
     const isRtl = i18n.language === 'ar';
 
@@ -116,6 +116,7 @@ export default function CartModal({ isOpen, onClose }: { isOpen: boolean; onClos
 
             toast.success(t('common.order_saved_success'));
             updateOrderId(cleanId);
+            setIsFullTrackingOpen(true);
 
             setTimeout(() => {
                 clearCart();
@@ -297,7 +298,7 @@ export default function CartModal({ isOpen, onClose }: { isOpen: boolean; onClos
 
                     {/* Tracking */}
                     <AnimatePresence>
-                        {orderId && items.length === 0 && (
+                        {orderId && isFullTrackingOpen && (
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -307,8 +308,8 @@ export default function CartModal({ isOpen, onClose }: { isOpen: boolean; onClos
                                 <OrderTracking
                                     orderId={orderId}
                                     onClose={() => {
-                                        updateOrderId(null);
-                                        setStep("items");
+                                        setIsFullTrackingOpen(false);
+                                        onClose();
                                     }}
                                 />
                             </motion.div>

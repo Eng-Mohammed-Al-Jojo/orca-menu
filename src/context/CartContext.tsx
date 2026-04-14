@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState, useEffect } from "react";
 import type { Item } from "../components/menu/Menu";
 
 /* ================= Types ================= */
@@ -8,6 +8,14 @@ export interface CartItem extends Item {
     selectedPrice: number;
     priceKey: string;
     optionLabel?: string;
+}
+
+export interface ActiveOrderState {
+    items: CartItem[];
+    totalItems: number;
+    totalPrice: number;
+    orderId: string | null;
+    status?: "active" | "closed";
 }
 
 interface CartContextType {
@@ -21,6 +29,8 @@ interface CartContextType {
     totalPrice: number;
     orderId: string | null;
     updateOrderId: (id: string | null) => void;
+    isFullTrackingOpen: boolean;
+    setIsFullTrackingOpen: (open: boolean) => void;
 }
 
 /* ================= Context ================= */
@@ -30,13 +40,35 @@ const CartContext = createContext<CartContextType | null>(null);
 /* ================= Provider ================= */
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-    const [items, setItems] = useState<CartItem[]>([]);
-    const [orderId, setOrderId] = useState<string | null>(() => localStorage.getItem("lastOrderId"));
+    const [initialState] = useState<ActiveOrderState | null>(() => {
+        try {
+            const saved = localStorage.getItem("active_order");
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed && Array.isArray(parsed.items)) {
+                    return parsed as ActiveOrderState;
+                }
+            }
+        } catch (e) {
+            console.error("Cart hydration failed:", e);
+        }
+        return null;
+    });
+
+    const [items, setItems] = useState<CartItem[]>(initialState?.items || []);
+    const [orderId, setOrderId] = useState<string | null>(
+        initialState?.orderId !== undefined ? initialState.orderId : () => localStorage.getItem("lastOrderId")
+    );
+    const [isFullTrackingOpen, setIsFullTrackingOpen] = useState(false);
 
     const updateOrderId = (id: string | null) => {
         setOrderId(id);
-        if (id) localStorage.setItem("lastOrderId", id);
-        else localStorage.removeItem("lastOrderId");
+        if (id) {
+            localStorage.setItem("lastOrderId", id);
+        } else {
+            localStorage.removeItem("lastOrderId");
+            setIsFullTrackingOpen(false);
+        }
     };
 
     /* إضافة صنف بسعر محدد بكمية محددة */
@@ -109,6 +141,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         [items]
     );
 
+    /* Local Storage Persistence Effect */
+    useEffect(() => {
+        try {
+            const stateToSave: ActiveOrderState = {
+                items,
+                totalItems,
+                totalPrice,
+                orderId,
+                status: orderId || items.length > 0 ? "active" : "closed"
+            };
+            localStorage.setItem("active_order", JSON.stringify(stateToSave));
+        } catch (e) {
+            console.error("Error saving active_order to localStorage", e);
+        }
+    }, [items, totalItems, totalPrice, orderId]);
+
     return (
         <CartContext.Provider
             value={{
@@ -122,6 +170,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 totalPrice,
                 orderId,
                 updateOrderId,
+                isFullTrackingOpen,
+                setIsFullTrackingOpen,
             }}
         >
             {children}

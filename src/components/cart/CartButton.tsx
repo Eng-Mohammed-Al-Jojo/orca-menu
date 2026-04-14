@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../../context/CartContext";
 import CartModal from "./CartModal";
@@ -11,8 +11,21 @@ interface CartButtonProps {
 
 export default function CartButton({ className = "" }: CartButtonProps) {
     const { t, i18n } = useTranslation();
-    const { totalItems } = useCart();
+    const { totalItems, isFullTrackingOpen, setIsFullTrackingOpen } = useCart();
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        if (isFullTrackingOpen) {
+            setOpen(true);
+        }
+    }, [isFullTrackingOpen]);
+
+    const handleCloseModal = () => {
+        setOpen(false);
+        if (isFullTrackingOpen) {
+            setIsFullTrackingOpen(false);
+        }
+    };
 
     return (
         <>
@@ -61,7 +74,7 @@ export default function CartButton({ className = "" }: CartButtonProps) {
 
             {/* Modal */}
             <AnimatePresence>
-                {open && <CartModal isOpen={open} onClose={() => setOpen(false)} />}
+                {open && <CartModal isOpen={open} onClose={handleCloseModal} />}
             </AnimatePresence>
         </>
     );

@@ -3,37 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaClock, FaCheckCircle, FaUtensils, FaMotorcycle, FaTimes, FaBell } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { FirebaseService } from "../../services/firebaseService";
+import { useCart } from "../../context/CartContext";
 
 export default function OrderStatusButton() {
     const { t, i18n } = useTranslation();
-    const [orderId, setOrderId] = useState<string | null>(null);
+    const { orderId, updateOrderId, isFullTrackingOpen, setIsFullTrackingOpen } = useCart();
     const [order, setOrder] = useState<any>(null);
     const [isVisible, setIsVisible] = useState(false);
     const isRtl = i18n.language === 'ar';
 
-    useEffect(() => {
-        // Check for order ID in localStorage
-        const storedId = localStorage.getItem("lastOrderId");
-        if (storedId) {
-            setOrderId(storedId);
-        }
-
-        // Listen for storage changes
-        const handleStorage = () => {
-            const newId = localStorage.getItem("lastOrderId");
-            if (newId !== orderId) setOrderId(newId);
-        };
-        window.addEventListener("storage", handleStorage);
-        const interval = setInterval(() => {
-            const newId = localStorage.getItem("lastOrderId");
-            if (newId !== orderId) setOrderId(newId);
-        }, 2000);
-
-        return () => {
-            window.removeEventListener("storage", handleStorage);
-            clearInterval(interval);
-        };
-    }, [orderId]);
 
     useEffect(() => {
         if (!orderId) {
@@ -55,6 +33,15 @@ export default function OrderStatusButton() {
 
         return () => unsubscribe();
     }, [orderId]);
+
+    useEffect(() => {
+        if (order && (order.status === 'delivered' || order.status === 'done' || order.archived)) {
+            const timer = setTimeout(() => {
+                updateOrderId(null);
+            }, 20000);
+            return () => clearTimeout(timer);
+        }
+    }, [order?.status, order?.archived, updateOrderId]);
 
     const getStatusInfo = (status: string) => {
         switch (status) {
@@ -111,14 +98,18 @@ export default function OrderStatusButton() {
         }
     };
 
-    const dismiss = () => {
-        localStorage.removeItem("lastOrderId");
-        setOrderId(null);
+    const dismiss = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        updateOrderId(null);
         setOrder(null);
         setIsVisible(false);
     };
 
-    if (!isVisible || !order || order.tracked === false) return null;
+    const handleOpenFull = () => {
+        setIsFullTrackingOpen(true);
+    };
+
+    if (!isVisible || !order || order.tracked === false || isFullTrackingOpen) return null;
 
     const statusInfo = getStatusInfo(order.status || "pending");
 
@@ -129,7 +120,8 @@ export default function OrderStatusButton() {
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 20, opacity: 0, scale: 0.95 }}
                 style={{ willChange: 'transform, opacity' }}
-                className={`fixed bottom-24 ${isRtl ? 'left-6 sm:left-10' : 'right-6 sm:right-10'} z-50 w-[280px] sm:w-[320px]`}
+                onClick={handleOpenFull}
+                className={`fixed bottom-24 ${isRtl ? 'left-6 sm:left-10' : 'right-6 sm:right-10'} z-50 w-[280px] sm:w-[320px] cursor-pointer`}
             >
                 <div className="bg-(--bg-card)/80 backdrop-blur-2xl border border-(--border-color) rounded-[2.5rem] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden relative group">
                     {/* Progress Bar Background */}
