@@ -34,8 +34,8 @@ export default function LoadingScreen({ visible, onExited }: Props) {
   }, [visible]);
 
   const messages = isRtl
-    ? ["سنتعتني بخدمتكم ...", "نجمع أجود المكونات...", "لحظات فقط المتبقية...", "مرحباً بك"]
-    : ["Preparing Luxury...", "Gathering the finest...", "Just a moment...", "Welcome"];
+    ? ["نصنع لك يوم", "استمتع بتجربتك"]
+    : ["We're making your day", "Enjoy your experience"];
 
   useEffect(() => {
     const interval = setInterval(() => {
