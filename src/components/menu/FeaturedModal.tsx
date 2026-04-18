@@ -34,7 +34,7 @@ export default function FeaturedModal({ isOpen, onClose, items, orderSystem, onI
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className="relative w-full max-w-4xl max-h-[85vh] bg-(--bg-card) rounded-[3rem] shadow-2xl overflow-hidden border border-white/10 flex flex-col"
+            className="relative w-full max-w-sm max-h-[85vh] bg-(--bg-card) rounded-[3rem] shadow-2xl overflow-hidden border border-white/10 flex flex-col"
           >
             {/* Header */}
             <div className="p-6 sm:p-8 flex items-center justify-between border-b border-(--border-color)/30 bg-linear-to-b from-orange-500/10 to-transparent">
@@ -61,7 +61,7 @@ export default function FeaturedModal({ isOpen, onClose, items, orderSystem, onI
 
             {/* Scrollable Grid Area */}
             <div className="flex-1 overflow-y-auto p-6 sm:p-8 custom-scrollbar">
-              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+              <div className="flex flex-col items-center gap-4 sm:gap-6">
                 {items.map((item) => (
                   <ItemRow
                     key={`modal-feat-${item.id}`}

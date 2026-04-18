@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX, FiCheckCircle, FiInfo } from "react-icons/fi";
+import { FiCheckCircle, FiInfo, FiPlus } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import type { Item } from "./Menu";
 import { getIngredientList } from "../../utils/stringUtils";
+import { useCart } from "../../context/CartContext";
+import { toast } from "react-hot-toast";
 
 interface Props {
   item: Item | null;
@@ -12,11 +15,45 @@ interface Props {
 
 export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
   const { t } = useTranslation();
+  const { addItem } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
 
   if (!item) return null;
 
   const itemName = item.nameAr || item.name || "";
   const itemDescription = item.ingredientsAr || item.ingredients || "";
+
+  const handleAddToOrder = () => {
+    if (!item || isAdding) return;
+    setIsAdding(true);
+
+    // Extract price from possible multi-price string
+    const rawPrice = String(item.price).split(",")[0];
+    const numericPrice = parseFloat(rawPrice);
+
+    addItem(item, numericPrice);
+
+    // Modern Feedback Notification
+    toast.success(`${itemName} ${t('common.added_to_cart')}`, {
+      icon: '🛒',
+      position: 'top-center',
+      style: {
+        borderRadius: '24px',
+        background: 'var(--bg-card)',
+        color: 'var(--text-main)',
+        border: '1px solid var(--border-color)',
+        fontFamily: 'Cairo',
+        fontWeight: 'bold',
+        fontSize: '14px'
+      }
+    });
+
+    // Auto-close with smooth delay
+    setTimeout(() => {
+      onClose();
+      setIsAdding(false);
+    }, 600);
+  };
 
   return (
     <AnimatePresence>
@@ -53,13 +90,6 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
                 onError={(e) => { (e.target as HTMLImageElement).src = "/logo.png"; }}
               />
               <div className="absolute inset-0 bg-linear-to-t from-(--bg-card) via-transparent to-black/20" />
-
-              <button
-                onClick={onClose}
-                className="absolute top-6 left-6 w-12 h-12 rounded-2xl bg-black/20 backdrop-blur-xl text-white flex items-center justify-center hover:bg-primary transition-all border border-white/20 shadow-xl group"
-              >
-                <FiX size={24} className="group-hover:rotate-90 transition-transform duration-300" />
-              </button>
 
               <div className="absolute bottom-6 right-6 text-right">
                 <motion.h2
@@ -133,13 +163,21 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
 
             </div>
 
-            {/* Action Sticky Footer (Social/Order context) */}
+            {/* Action Sticky Footer - Add to Order Primary Button */}
             <div className="p-6 sm:p-10 border-t border-(--border-color)/30 bg-(--bg-card)">
               <button
-                onClick={onClose}
-                className="w-full py-5 bg-primary text-white rounded-3xl font-bold text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                onClick={handleAddToOrder}
+                disabled={isAdding}
+                className={`w-full py-5 bg-primary text-white rounded-3xl font-bold text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 ${isAdding ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
-                {t('common.close')}
+                {isAdding ? (
+                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <FiPlus size={22} />
+                    {t('common.add_to_order')}
+                  </>
+                )}
               </button>
             </div>
           </motion.div>

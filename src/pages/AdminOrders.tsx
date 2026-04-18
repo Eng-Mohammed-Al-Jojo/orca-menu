@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
-import { useEffect, useState, useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useState, useMemo, type ReactNode } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import {
     FiSearch, FiFilter, FiCalendar, FiPackage, FiCheckCircle,
@@ -17,13 +17,14 @@ import { calculateStats } from "../utils/accountingUtils";
 import AnalyticsSection from "../components/admin/AnalyticsSection";
 import OrderDetailsDrawer from "../components/admin/OrderDetailsDrawer";
 import DeleteConfirmationModal from "../components/admin/DeleteConfirmationModal";
+import OrderNotificationToast from "../components/admin/OrderNotificationToast";
+import { useOrderNotifications } from "../hooks/useOrderNotifications";
 import type { Order, OrderStatus } from "../types/order";
 import {
     isWithinInterval,
     startOfWeek, endOfWeek, startOfMonth, endOfMonth,
     isSameDay
 } from "date-fns";
-import { playNewOrderSound } from "../utils/audioUtils";
 
 type DateRangeFilter = "all" | "today" | "week" | "month";
 
@@ -50,7 +51,8 @@ export default function AdminOrdersPage() {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
-    const processedOrderIds = useRef<Set<string>>(new Set());
+    // ✅ Senior Level Notification Management
+    const { notifications, dismissNotification } = useOrderNotifications(limit);
 
     useEffect(() => {
         const auth = FirebaseService.auth();
@@ -66,37 +68,9 @@ export default function AdminOrdersPage() {
         const unsubscribe = OrderService.listenToOrders(limit, (ordersArray) => {
             setOrders(ordersArray);
             setLoading(false);
-
-            const now = Date.now();
-
-            ordersArray.forEach(order => {
-                if (!processedOrderIds.current.has(order.id)) {
-                    processedOrderIds.current.add(order.id);
-                    // Check if the order was created within the last 5 seconds (5000ms)
-                    if (now - order.createdAt < 5000) {
-                        playNewOrderSound();
-
-                        toast.custom((t) => (
-                            <div className={`${t.visible ? 'animate-in fade-in slide-in-from-right-full' : 'animate-out fade-out slide-out-to-right-full'} max-w-md w-full bg-(--bg-card) shadow-2xl rounded-2xl pointer-events-auto flex ring-1 ring-black/5 p-4 items-center gap-4 border-r-4 border-primary font-['Cairo']`} dir="rtl">
-                                <div className="flex-1">
-                                    <p className="text-sm font-black text-(--text-main) flex items-center gap-2">
-                                        <span>طلب جديد! 🔔</span>
-                                        <span className="text-primary font-mono tracking-tighter">{order.orderId}</span>
-                                    </p>
-                                    <div className="mt-1">
-                                        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${order.orderType === 'in' ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20' : 'bg-orange-500/10 text-orange-600 border border-orange-500/20'}`}>
-                                            {order.orderType === 'in' ? 'داخل المطعم 🍽️' : 'تيك أواي 🥡'}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        ), { duration: 5000, position: 'top-right' });
-                    }
-                }
-            });
         });
         return () => unsubscribe();
-    }, [authOk, limit, t]);
+    }, [authOk, limit]);
 
     const stats = useMemo(() => calculateStats(orders), [orders]);
 
@@ -469,6 +443,13 @@ export default function AdminOrdersPage() {
                 onConfirm={confirmDelete}
                 title={t('admin.delete_order') || "حذف الطلب"}
                 details={orders.find(o => o.id === deleteId)?.orderId}
+            />
+
+            {/* ✅ Real-time Notifications Stack */}
+            <OrderNotificationToast
+                notifications={notifications}
+                onClose={dismissNotification}
+                onView={setSelectedOrder}
             />
         </div>
     );

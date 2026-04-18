@@ -84,7 +84,7 @@ const ItemRow = React.memo(
         onClick={handleOrderClick}
         className={`
           relative group flex flex-col bg-(--bg-card)
-          rounded-2xl border border-(--menu-border)
+          rounded-3xl border border-(--menu-border)
           overflow-hidden shadow-sm
           transition-all duration-200
           ${unavailable
