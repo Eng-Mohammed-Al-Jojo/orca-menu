@@ -6,27 +6,38 @@ import { playNewOrderSound } from "../utils/audioUtils";
 /**
  * useOrderNotifications
  * Senior-level hook for real-time order detection and notification queuing.
- * Handles isFirstLoad logic, sound debouncing, and audio activation.
+ * Handles isFirstLoad logic, sound debouncing, and dual-mode notifications (Toast/System).
  */
 export const useOrderNotifications = (limit: number = 20) => {
     const [notifications, setNotifications] = useState<Order[]>([]);
+    const [settings, setSettings] = useState({
+        sound: localStorage.getItem('order_notify_sound') !== 'false',
+        system: localStorage.getItem('order_notify_system') !== 'false'
+    });
+
     const knownOrderIds = useRef<Set<string>>(new Set());
     const isFirstLoad = useRef(true);
     const audioEnabled = useRef(false);
     const soundDebounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     /**
+     * Update settings and persist to localStorage
+     */
+    const updateSettings = useCallback((key: 'sound' | 'system', value: boolean) => {
+        setSettings(prev => {
+            const next = { ...prev, [key]: value };
+            localStorage.setItem(`order_notify_${key}`, String(value));
+            return next;
+        });
+    }, []);
+
+    /**
      * Activates audio engine on first user interaction.
-     * Essential for bypassing browser autoplay restrictions.
      */
     const enableAudio = useCallback(() => {
         if (audioEnabled.current) return;
         audioEnabled.current = true;
-        
-        // Warm up audio system with a brief silent play if needed,
-        // but since we have a dedicated utility, we just mark as ready.
         console.log("Order Notification System: Audio Ready 🔊");
-        
         window.removeEventListener('click', enableAudio);
         window.removeEventListener('touchstart', enableAudio);
     }, []);
@@ -42,10 +53,9 @@ export const useOrderNotifications = (limit: number = 20) => {
 
     /**
      * Plays the notification sound with a slight debounce
-     * to prevent audio "clashing" if multiple orders arrive instantly.
      */
     const triggerSound = useCallback(() => {
-        if (!audioEnabled.current) return;
+        if (!audioEnabled.current || !settings.sound) return;
         
         if (soundDebounceTimer.current) clearTimeout(soundDebounceTimer.current);
         
@@ -53,22 +63,39 @@ export const useOrderNotifications = (limit: number = 20) => {
             playNewOrderSound();
             soundDebounceTimer.current = null;
         }, 150);
-    }, []);
+    }, [settings.sound]);
+
+    /**
+     * Shows a browser system notification (for background/minimized state)
+     */
+    const showSystemNotification = useCallback((order: Order) => {
+        if (!settings.system || !("Notification" in window) || Notification.permission !== "granted") return;
+
+        const title = `طلب جديد 🛎️`;
+        const options = {
+            body: `طلب رقم ${order.orderId}\nالعميل: ${order.customer?.name}\nالإجمالي: ${order.totalPrice}₪`,
+            icon: "/logo.png",
+            tag: order.id,
+            silent: true
+        };
+
+        const notification = new Notification(title, options);
+        notification.onclick = (e) => {
+            e.preventDefault();
+            window.focus();
+            notification.close();
+        };
+    }, [settings.system]);
 
     useEffect(() => {
-        // We only track the latest orders to prevent memory bloat
         const unsubscribe = OrderService.listenToOrders(limit, (orders) => {
             if (isFirstLoad.current) {
-                // Phase 1: Silent hydration of current orders
                 orders.forEach(o => knownOrderIds.current.add(o.id));
                 isFirstLoad.current = false;
-                console.log(`Order Monitoring: Active (Hydrated ${orders.length} existing orders)`);
                 return;
             }
 
-            // Phase 2: Detect truly new orders by ID reconciliation
             const incomingNewOrders: Order[] = [];
-            
             orders.forEach(order => {
                 if (!knownOrderIds.current.has(order.id)) {
                     knownOrderIds.current.add(order.id);
@@ -77,13 +104,17 @@ export const useOrderNotifications = (limit: number = 20) => {
             });
 
             if (incomingNewOrders.length > 0) {
-                setNotifications(prev => [...prev, ...incomingNewOrders]);
+                if (document.hidden) {
+                    incomingNewOrders.forEach(order => showSystemNotification(order));
+                } else {
+                    setNotifications(prev => [...prev, ...incomingNewOrders]);
+                }
                 triggerSound();
             }
         });
 
         return () => unsubscribe();
-    }, [limit, triggerSound]);
+    }, [limit, triggerSound, showSystemNotification]);
 
     /**
      * Remove a notification from the UI stack
@@ -93,19 +124,21 @@ export const useOrderNotifications = (limit: number = 20) => {
     }, []);
 
     /**
-     * Auto-dismissal logic: oldest notifications disappear after 5 seconds
+     * Auto-dismissal logic for toasts: disappear after 10 seconds
      */
     useEffect(() => {
         if (notifications.length > 0) {
             const timer = setTimeout(() => {
                 dismissNotification(notifications[0].id);
-            }, 5000);
+            }, 10000);
             return () => clearTimeout(timer);
         }
     }, [notifications, dismissNotification]);
 
     return {
         notifications,
-        dismissNotification
+        dismissNotification,
+        settings,
+        updateSettings
     };
 };

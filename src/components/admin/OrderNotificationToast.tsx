@@ -54,6 +54,12 @@ export default function OrderNotificationToast({ notifications, onClose, onView 
                                     <span className="text-[11px] font-bold text-(--text-muted) truncate max-w-[120px]">
                                         {order.customer?.name}
                                     </span>
+
+                                    <div className="ms-auto">
+                                        <span className="text-sm font-black text-primary bg-primary/5 px-2 py-1 rounded-lg border border-primary/10">
+                                            {order.totalPrice}₪
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

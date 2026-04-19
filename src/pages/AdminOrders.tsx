@@ -5,7 +5,7 @@ import {
     FiSearch, FiFilter, FiCalendar, FiPackage, FiCheckCircle,
     FiClock, FiTrash2, FiArchive, FiDollarSign, FiBarChart2, FiLayers,
     FiShoppingBag, FiInfo, FiTag, FiArrowRight, FiRotateCw, FiX, FiBell,
-    FiTruck
+    FiTruck, FiBellOff, FiVolume2, FiVolumeX
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -52,7 +52,7 @@ export default function AdminOrdersPage() {
     const [deleteId, setDeleteId] = useState<string | null>(null);
 
     // ✅ Senior Level Notification Management
-    const { notifications, dismissNotification } = useOrderNotifications(limit);
+    const { notifications, dismissNotification, settings, updateSettings } = useOrderNotifications(limit);
 
     useEffect(() => {
         const auth = FirebaseService.auth();
@@ -60,6 +60,16 @@ export default function AdminOrdersPage() {
             setAuthOk(!!user);
             if (!user) setLoading(false);
         });
+
+        // 🔔 Request notification permission once on dashboard load
+        if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    console.log("Order Monitoring: System Notifications Enabled 🔔");
+                }
+            });
+        }
+
         return () => unsubAuth();
     }, []);
 
@@ -162,6 +172,23 @@ export default function AdminOrdersPage() {
                             <FiBarChart2 />
                             {t('admin.analytics') || "التحليلات"}
                         </button>
+
+                        <div className="flex bg-(--bg-card) p-1 gap-2 rounded-2xl border border-(--border-color) mr-2 shadow-inner">
+                            <button
+                                onClick={() => updateSettings('system', !settings.system)}
+                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${settings.system ? 'text-primary bg-primary/10' : 'text-(--text-muted) hover:bg-(--bg-main)'}`}
+                                title={settings.system ? "إيقاف إشعارات النظام" : "تفعيل إشعارات النظام"}
+                            >
+                                {settings.system ? <FiBell /> : <FiBellOff />}
+                            </button>
+                            <button
+                                onClick={() => updateSettings('sound', !settings.sound)}
+                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${settings.sound ? 'text-blue-500 bg-blue-500/10' : 'text-(--text-muted) hover:bg-(--bg-main)'}`}
+                                title={settings.sound ? "كتم الصوت" : "تفعيل الصوت"}
+                            >
+                                {settings.sound ? <FiVolume2 /> : <FiVolumeX />}
+                            </button>
+                        </div>
 
                         <div className="flex bg-(--bg-card) p-1 rounded-2xl border border-(--border-color)">
                             {[
