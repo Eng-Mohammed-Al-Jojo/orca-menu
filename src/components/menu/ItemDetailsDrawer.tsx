@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiCheckCircle, FiInfo, FiPlus } from "react-icons/fi";
+import { FiCheckCircle, FiInfo, FiShoppingCart, FiX } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import type { Item } from "./Menu";
 import { getIngredientList } from "../../utils/stringUtils";
@@ -91,6 +91,18 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
               />
               <div className="absolute inset-0 bg-linear-to-t from-(--bg-card) via-transparent to-black/20" />
 
+              {/* Close Button - Top Left */}
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                onClick={onClose}
+                className="absolute top-4 left-4 w-10 h-10 rounded-2xl bg-red-500/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/60 hover:scale-110 active:scale-95 transition-all z-20"
+                aria-label="Close"
+              >
+                <FiX size={18} />
+              </motion.button>
+
               <div className="absolute bottom-6 right-6 text-right">
                 <motion.h2
                   initial={{ y: 20, opacity: 0 }}
@@ -168,13 +180,13 @@ export default function ItemDetailsDrawer({ item, isOpen, onClose }: Props) {
               <button
                 onClick={handleAddToOrder}
                 disabled={isAdding}
-                className={`w-full py-5 bg-primary text-white rounded-3xl font-bold text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 ${isAdding ? 'opacity-70 cursor-not-allowed' : ''}`}
+                className={`w-full py-3 bg-primary text-white rounded-3xl font-bold text-lg shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3 ${isAdding ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {isAdding ? (
                   <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    <FiPlus size={22} />
+                    <FiShoppingCart size={22} />
                     {t('common.add_to_order')}
                   </>
                 )}
