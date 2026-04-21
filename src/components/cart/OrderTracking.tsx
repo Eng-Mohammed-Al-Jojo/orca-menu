@@ -4,6 +4,7 @@ import { FiClock, FiCheckCircle, FiPackage, FiChevronRight, FiCheck } from "reac
 import { FaWhatsapp } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { FirebaseService } from "../../services/firebaseService";
+import PaymentMethodsDisplay from "../common/PaymentMethodsDisplay";
 
 interface OrderTrackingProps {
     orderId: string;
@@ -88,8 +89,7 @@ export default function OrderTracking({ orderId, onClose }: OrderTrackingProps) 
     };
 
     return (
-        <div className="p-6 sm:p-8 space-y-8 min-h-[400px] flex flex-col">
-
+        <div className="p-6 sm:p-8 space-y-8 min-h-[400px] h-full overflow-y-auto flex flex-col custom-scrollbar">
             <AnimatePresence mode="wait">
                 {isCompleted ? (
                     <motion.div
@@ -182,6 +182,14 @@ export default function OrderTracking({ orderId, onClose }: OrderTrackingProps) 
                                 <span className="text-sm font-black text-(--text-main)">{t('common.total')}</span>
                                 <span className="text-2xl font-black text-primary">{order.totalPrice}₪</span>
                             </div>
+                        </div>
+
+                        {/* ✅ Payment Methods - أضف هون */}
+                        <div>
+                            <h3 className="text-xs font-black text-(--text-muted) uppercase tracking-widest px-1 mb-3">
+                                {t('admin.available_payment_methods')}
+                            </h3>
+                            <PaymentMethodsDisplay />
                         </div>
                     </motion.div>
                 ) : null}

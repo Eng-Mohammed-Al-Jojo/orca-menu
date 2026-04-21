@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiClock, FiCheckCircle, FiPackage, FiChevronRight, FiPhone, FiCheck } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+// أضف هاد الإمبورت فوق
+import PaymentMethodsDisplay from "../components/common/PaymentMethodsDisplay"; // عدّل المسار حسب مشروعك
 
 export default function TrackOrderPage() {
     const { id } = useParams();
@@ -197,6 +199,19 @@ export default function TrackOrderPage() {
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* ✅ Payment Methods Section */}
+                <h3 className="text-xs font-black text-(--text-muted) uppercase tracking-widest px-2 flex items-center gap-2 mb-2">
+                    {t('admin.available_payment_methods')}
+                </h3>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                >
+                    <PaymentMethodsDisplay />
+                </motion.div>
+
 
                 {/* Details Grid */}
                 <div className="grid md:grid-cols-2 gap-6">

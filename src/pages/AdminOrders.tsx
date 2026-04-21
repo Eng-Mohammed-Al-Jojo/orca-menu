@@ -18,6 +18,7 @@ import AnalyticsSection from "../components/admin/AnalyticsSection";
 import OrderDetailsDrawer from "../components/admin/OrderDetailsDrawer";
 import DeleteConfirmationModal from "../components/admin/DeleteConfirmationModal";
 import OrderNotificationToast from "../components/admin/OrderNotificationToast";
+import PaymentMethodsModal from "../components/admin/PaymentMethodsModal";
 import { useOrderNotifications } from "../hooks/useOrderNotifications";
 import type { Order, OrderStatus } from "../types/order";
 import {
@@ -50,6 +51,7 @@ export default function AdminOrdersPage() {
     const [viewMode, setViewMode] = useState<"active" | "history" | "whatsapp">("active");
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
     // ✅ Senior Level Notification Management
     const { notifications, dismissNotification, settings, updateSettings } = useOrderNotifications(limit);
@@ -167,10 +169,18 @@ export default function AdminOrdersPage() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setShowAnalytics(!showAnalytics)}
-                            className={`px-5 py-3 rounded-2xl font-black text-sm flex items-center gap-2 transition-all ${showAnalytics ? 'bg-blue-500 text-white shadow-lg' : 'bg-(--bg-card) text-(--text-muted) border border-(--border-color)'}`}
+                            title="الاحصائيات"
+                            className="px-5 py-3 rounded-2xl font-black text-sm flex items-center gap-2 bg-(--bg-card) text-(--text-muted) border border-(--border-color) transition-all hover:bg-blue-500 hover:text-white"
                         >
                             <FiBarChart2 />
-                            {t('admin.analytics') || "التحليلات"}
+                        </button>
+
+                        <button
+                            onClick={() => setIsPaymentModalOpen(true)}
+                            title="طرق الدفع الإلكتروني"
+                            className="px-5 py-3 rounded-2xl font-black text-sm flex items-center gap-2 bg-(--bg-card) text-(--text-muted) border border-(--border-color) transition-all hover:bg-primary hover:text-white"
+                        >
+                            <FiDollarSign />
                         </button>
 
                         <div className="flex bg-(--bg-card) p-1 gap-2 rounded-2xl border border-(--border-color) mr-2 shadow-inner">
@@ -477,6 +487,12 @@ export default function AdminOrdersPage() {
                 notifications={notifications}
                 onClose={dismissNotification}
                 onView={setSelectedOrder}
+            />
+
+            {/* ✅ Payment Methods Management */}
+            <PaymentMethodsModal
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
             />
         </div>
     );
