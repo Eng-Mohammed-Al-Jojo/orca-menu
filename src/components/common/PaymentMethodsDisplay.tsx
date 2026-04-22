@@ -81,9 +81,9 @@ export default function PaymentMethodsDisplay() {
                         <div className="w-9 h-9 rounded-xl bg-white border border-(--border-color) flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                             {method.image ? (
                                 <img
-                                    src={`/images/payment/${method.image}`}
+                                    src={method.image.startsWith('/') ? method.image : `/images/payment/${method.image}`}
                                     alt={method.name}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-contain p-1"
                                     onError={(e) => {
                                         (e.target as HTMLImageElement).src = 'https://placehold.co/36x36?text=?';
                                     }}

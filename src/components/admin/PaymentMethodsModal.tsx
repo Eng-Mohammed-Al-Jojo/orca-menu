@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiX, FiPlus, FiTrash2, FiSave, FiCheck, FiSettings, FiImage, FiList, FiToggleLeft, FiToggleRight } from "react-icons/fi";
+import { FiX, FiPlus, FiTrash2, FiSave, FiCheck, FiSettings, FiImage, FiList, FiToggleLeft, FiToggleRight, FiEdit } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { PaymentService } from "../../services/paymentService";
 import type { PaymentMethod, PaymentMethodField } from "../../types/payment";
 import { toast } from "react-hot-toast";
+import FeaturedGallery from "./FeaturedGallery";
+
+const paymentImages = [
+    "bop.png",
+    "ipb.png",
+    "jawwalPay.png",
+    "palPay.jpeg"
+];
 
 interface Props {
     isOpen: boolean;
@@ -17,6 +25,7 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
     const [methods, setMethods] = useState<PaymentMethod[]>([]);
     const [editingMethod, setEditingMethod] = useState<Partial<PaymentMethod> | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showGallery, setShowGallery] = useState(false);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -90,7 +99,8 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
     };
 
     return (
-        <AnimatePresence>
+        <>
+            <AnimatePresence>
             {isOpen && (
                 <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                     <motion.div
@@ -153,7 +163,11 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-12 h-12 rounded-xl bg-white border border-(--border-color) flex items-center justify-center overflow-hidden shrink-0">
                                                             {method.image ? (
-                                                                <img src={`/images/payment/${method.image}`} alt={method.name} className="w-full h-full object-contain" />
+                                                                <img 
+                                                                    src={method.image.startsWith('/') ? method.image : `/images/payment/${method.image}`} 
+                                                                    alt={method.name} 
+                                                                    className="w-full h-full object-contain p-1" 
+                                                                />
                                                             ) : (
                                                                 <FiImage className="text-(--text-muted)" />
                                                             )}
@@ -181,7 +195,7 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
                                                             onClick={() => setEditingMethod(method)}
                                                             className="p-2 text-blue-500 hover:bg-blue-500/10 rounded-xl transition-all"
                                                         >
-                                                            <FiPlus size={18} />
+                                                            <FiEdit size={18} />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDelete(method.id)}
@@ -229,12 +243,33 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
                                                     </div>
                                                     <div>
                                                         <label className="text-[10px] font-black uppercase text-(--text-muted) tracking-widest block mb-2">{t('admin.image_name')}</label>
-                                                        <input
-                                                            value={editingMethod.image || ""}
-                                                            onChange={(e) => setEditingMethod({ ...editingMethod, image: e.target.value })}
-                                                            className="w-full bg-(--bg-card) border border-(--border-color) rounded-2xl py-3 px-4 text-sm font-bold outline-none focus:border-primary transition-all"
-                                                            placeholder="example.png"
-                                                        />
+                                                        <div className="flex gap-3 items-center">
+                                                            <div className="w-16 h-16 rounded-2xl bg-(--bg-card) border border-(--border-color) flex items-center justify-center overflow-hidden shrink-0 shadow-inner group/preview relative">
+                                                                {editingMethod.image ? (
+                                                                    <>
+                                                                        <img 
+                                                                            src={editingMethod.image.startsWith('/') ? editingMethod.image : `/images/payment/${editingMethod.image}`} 
+                                                                            className="w-full h-full object-contain p-2" 
+                                                                        />
+                                                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/preview:opacity-100 transition-opacity flex items-center justify-center">
+                                                                            <p className="text-[8px] text-white font-black uppercase tracking-tighter truncate px-1">
+                                                                                {editingMethod.image.split('/').pop()}
+                                                                            </p>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <FiImage className="text-(--text-muted) text-xl" />
+                                                                )}
+                                                            </div>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => setShowGallery(true)}
+                                                                className="flex-1 h-16 bg-(--bg-card) border border-(--border-color) rounded-2xl flex flex-col items-center justify-center gap-1 hover:border-primary hover:bg-primary/5 transition-all text-(--text-muted) hover:text-primary"
+                                                            >
+                                                                <FiImage size={20} />
+                                                                <span className="text-[10px] font-black uppercase tracking-widest">{editingMethod.image ? t('common.edit') : t('common.pick_image')}</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                     <div className="flex items-center gap-3 py-2">
                                                         <button
@@ -318,5 +353,20 @@ export default function PaymentMethodsModal({ isOpen, onClose }: Props) {
                 </div>
             )}
         </AnimatePresence>
-    );
+
+        <FeaturedGallery
+            visible={showGallery}
+            onClose={() => setShowGallery(false)}
+            onSelect={(img) => {
+                setEditingMethod({ ...editingMethod, image: img });
+                setShowGallery(false);
+            }}
+            galleryImages={paymentImages}
+            selectedImage={editingMethod?.image}
+            title={t('admin.manage_payment_methods')}
+            basePath="/images/payment/"
+            returnFullPath={true}
+        />
+    </>
+);
 }

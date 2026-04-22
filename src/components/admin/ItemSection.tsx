@@ -82,7 +82,7 @@ const SortableItem: React.FC<{
           {item.image ? (
             <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden border border-(--border-color) shadow-inner">
               <img
-                src={`/images/${item.image}`}
+                src={item.image.startsWith('/') ? item.image : `/images/${item.image}`}
                 alt={item.nameAr}
                 className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500"
                 onError={(e) => { e.currentTarget.src = "/logo.png" }}

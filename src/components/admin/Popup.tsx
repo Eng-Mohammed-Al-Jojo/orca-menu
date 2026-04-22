@@ -181,7 +181,7 @@ const Popup: React.FC<Props> = ({
                     >
                       {selectedImg ? (
                         <div className="flex items-center gap-2">
-                          <img src={`/images/${selectedImg}`} className="w-8 h-8 rounded-lg object-cover" />
+                          <img src={selectedImg.startsWith('/') ? selectedImg : `/images/${selectedImg}`} className="w-8 h-8 rounded-lg object-cover" />
                           <span className="truncate">{selectedImg}</span>
                         </div>
                       ) : (
@@ -265,7 +265,7 @@ const Popup: React.FC<Props> = ({
                   >
                     {selectedImg ? (
                       <div className="flex items-center gap-2">
-                        <img src={`/images/${selectedImg}`} className="w-8 h-8 rounded-lg object-cover" />
+                        <img src={selectedImg.startsWith('/') ? selectedImg : `/images/${selectedImg}`} className="w-8 h-8 rounded-lg object-cover" />
                         <span className="truncate">{selectedImg}</span>
                       </div>
                     ) : (
